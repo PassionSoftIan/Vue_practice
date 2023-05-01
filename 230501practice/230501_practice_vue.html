@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <button @click="pickedAnimal='cat'">getCat</button>
+        <button @click="pickedAnimal='dog'">getDog</button>
+        <!-- <p>{{ pickedAnimal }}</p> -->
+        <hr>
+        <img
+        v-for="image in images"
+        :key="image.id"
+        :src="image.url" 
+        alt=""
+        width="300px"
+        height="300px">
+    </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            url: '',
+            images: [],
+            pickedAnimal: '',
+        },
+        methods: {
+            getCat() {
+                axios({
+                    method: 'get',
+                    url: 'https://api.thecatapi.com/v1/images/search',
+                })
+                .then(res => {
+                    const { url, id } = res.data[0]
+                    const data = {
+                        id,
+                        url
+                    }
+                    this.images.push(data)
+                    console.log(this.images)
+                })
+                .catch(err => console.log(err))
+            },
+            getDog() {
+                axios({
+                    method: 'get',
+                    url: 'https://dog.ceo/api/breeds/image/random'
+                })
+                .then(res => {
+                    console.log(res)
+                    const url = res.data.message
+                    // 고유한 값 -> 시간 (함수 호출 시점의 시간은 돌아올 수 없다.)
+                    // getTime으로 얻을 수 있는 값은 unix 타임
+                    const id = new Date().getTime()
+                    const data = {
+                        id,
+                        url
+                    }
+
+                    this.images.push(data)
+                })
+                .catch(err => console.log(err))
+            }
+        },
+        watch: {
+            pickedAnimal(newVal, oldVal){
+                if (newVal === 'cat') {
+                    this.getCat()
+                } else {
+                    this.getDog()
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>
