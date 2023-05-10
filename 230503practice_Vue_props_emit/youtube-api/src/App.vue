@@ -18,7 +18,7 @@ import TheSearchBar from './components/TheSearchBar.vue'
 import VideoList from './components/VideoList.vue'
 import axios from 'axios'
 const API_URL = 'https://www.googleapis.com/youtube/v3/search'
-const API_KEY = 'AIzaSyAxS868fkcL7iGhvjWfEMp8YuWnf5NeWHo'
+const API_KEY = ''
 
 export default {
   name: 'App',
